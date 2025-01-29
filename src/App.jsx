@@ -1,36 +1,8 @@
 import { useState } from "react";
-
-const TURNOS ={
-  X: 'x',
-  O: 'o'
-}
-
-
-const Cuadrado = ({children, isSelected, actualizarTablero, index})=> {
+import confetti from "canvas-confetti";
+import { Cuadrado } from "./components/Cuadrado";
+import { TURNOS, COMBOS_GANADORES } from "./game";
   
-  const className = `square ${isSelected ? 'is-selected' : ''}`
-
-  const handleClick = () => {
-    actualizarTablero(index)
-  }
-
-  return(
-    <div onClick={handleClick} className={className}>
-      {children}
-    </div>
-  )
-}
-
-  const COMBOS_GANADORES = [
-    [0,1,2],
-    [3,4,5],
-    [6,7,8],
-    [0,3,6],
-    [1,4,7],
-    [2,5,8],
-    [0,4,8],
-    [2,4,6]
-  ]
 
 
 function App() {
@@ -64,6 +36,11 @@ function App() {
     setGanador(null)
   }
 
+  const checarSiFinalizoJuego = (nuevoTablero) =>{
+    //revisar si hay un empate si no hay mas espacios vacios en el tablero y ningun ganador
+    return nuevoTablero.every((cuadrado) => cuadrado !== null)
+  }
+
   const actualizarTablero = (index) =>{
     //si ya existe no colocar nada
     if (tablero[index] || ganador) return
@@ -80,7 +57,10 @@ function App() {
     //revisar si alguien gano
     const nuevoGanador = checarGanador(nuevoTablero)
     if(nuevoGanador){
+      confetti()
       setGanador(nuevoGanador)
+    }else if(checarSiFinalizoJuego(nuevoTablero)){
+      setGanador(false) //empate
     }
   }
 
