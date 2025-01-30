@@ -5,8 +5,16 @@ import { TURNOS } from "./game";
 
 export const useReglas = () => {
   
-  const [tablero, setTablero] = useState(Array(9).fill(null));
-  const [turno, setTurno] = useState(TURNOS.X);
+  const [tablero, setTablero] = useState(() =>{
+    const tableroGuardado = window.localStorage.getItem('tablero')
+    return tableroGuardado ? JSON.parse(tableroGuardado) : Array(9).fill(null)
+  })
+
+  const [turno, setTurno] = useState(() => {
+    const turnoGuardado = window.localStorage.getItem('turno')
+    return turnoGuardado ?? TURNOS.X
+  });
+
   const [ganador, setGanador] = useState(null);
 
   const actualizarTablero = (index) => {
@@ -18,6 +26,10 @@ export const useReglas = () => {
 
     const nuevoTurno = turno === TURNOS.X ? TURNOS.O : TURNOS.X;
     setTurno(nuevoTurno);
+
+    //local storage guardar partida
+    window.localStorage.setItem('tablero', JSON.stringify(nuevoTablero))
+    window.localStorage.setItem('turno', nuevoTurno)
 
     const nuevoGanador = checarGanador(nuevoTablero);
     if (nuevoGanador) {
@@ -32,6 +44,10 @@ export const useReglas = () => {
     setTablero(Array(9).fill(null));
     setTurno(TURNOS.X);
     setGanador(null);
+
+    window.localStorage.removeItem('tablero')
+    window.localStorage.removeItem('turno')
+
   };
 
   return {
