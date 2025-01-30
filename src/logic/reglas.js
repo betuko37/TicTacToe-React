@@ -4,15 +4,14 @@ import { checarGanador, checarSiFinalizoJuego } from "../logic/tabla";
 import { TURNOS } from "./game";
 
 export const useReglas = () => {
-  
-  const [tablero, setTablero] = useState(() =>{
-    const tableroGuardado = window.localStorage.getItem('tablero')
-    return tableroGuardado ? JSON.parse(tableroGuardado) : Array(9).fill(null)
-  })
+  const [tablero, setTablero] = useState(() => {
+    const tableroGuardado = window.localStorage.getItem("tablero");
+    return tableroGuardado ? JSON.parse(tableroGuardado) : Array(9).fill(null);
+  });
 
   const [turno, setTurno] = useState(() => {
-    const turnoGuardado = window.localStorage.getItem('turno')
-    return turnoGuardado ?? TURNOS.X
+    const turnoGuardado = window.localStorage.getItem("turno");
+    return turnoGuardado ?? TURNOS.X;
   });
 
   const [ganador, setGanador] = useState(null);
@@ -28,8 +27,8 @@ export const useReglas = () => {
     setTurno(nuevoTurno);
 
     //local storage guardar partida
-    window.localStorage.setItem('tablero', JSON.stringify(nuevoTablero))
-    window.localStorage.setItem('turno', nuevoTurno)
+    window.localStorage.setItem("tablero", JSON.stringify(nuevoTablero));
+    window.localStorage.setItem("turno", nuevoTurno);
 
     const nuevoGanador = checarGanador(nuevoTablero);
     if (nuevoGanador) {
@@ -45,9 +44,8 @@ export const useReglas = () => {
     setTurno(TURNOS.X);
     setGanador(null);
 
-    window.localStorage.removeItem('tablero')
-    window.localStorage.removeItem('turno')
-
+    window.localStorage.removeItem("tablero");
+    window.localStorage.removeItem("turno");
   };
 
   return {
